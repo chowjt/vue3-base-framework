@@ -1,0 +1,35 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+  font-size: 14px;
+  color: $text-color-regular;
+  background-color: $bg-color-page;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+}
+
+a {
+  color: $primary-color;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
