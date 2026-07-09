@@ -145,6 +145,7 @@ frontend/
 │   │       └── user.js              # 用户状态
 │   ├── utils/                       # 工具函数
 │   │   ├── request.js               # Axios 封装（拦截器）
+│   │   ├── security.js              # 安全工具函数
 │   │   └── storage.js               # LocalStorage 封装
 │   ├── views/                       # 页面组件
 │   │   ├── HomeView.vue             # 首页
@@ -213,11 +214,43 @@ frontend/
 
 项目包含完整的登录流程示例：
 
-- 默认已集成 Mock 登录，方便前端独立开发
+- 默认已集成 Mock 登录，方便前端独立开发（仅开发环境生效）
 - **测试账号**：`admin`
 - **测试密码**：`123456`
 - 使用其他账号密码时会尝试调用真实后端 API `/api/auth/login`
 - 登录成功后 token 会持久化到 localStorage，并自动跳转原目标页或首页
+
+## 安全机制
+
+项目内置了多项安全防护措施：
+
+### 开放重定向防护
+
+登录页的 `redirect` 参数经过严格校验，防止恶意网站诱导用户跳转：
+
+- 禁止跳转至外部 URL（仅允许 localhost / 127.0.0.1 / .local 域名）
+- 禁止跳转至协议相对 URL（`//xxx`）
+- 禁止跳转至 `javascript:` 或 `data:` URL
+- 所有跳转必须以 `/` 开头
+
+### 原型污染防护
+
+LocalStorage 存储时自动过滤 `__proto__`、`constructor`、`prototype` 等危险属性，防止原型链污染攻击。
+
+### 错误信息脱敏
+
+生产环境下不暴露详细的错误信息，避免泄露系统内部信息。
+
+### Mock 登录环境隔离
+
+Mock 登录功能仅在开发环境（`import.meta.env.MODE === 'development'`）启用，生产环境自动禁用。
+
+### 安全工具函数
+
+`src/utils/security.js` 提供以下安全工具函数：
+
+- `isValidRedirect(url)` - 校验跳转 URL 是否安全
+- `sanitizeRedirect(url, defaultUrl)` - 安全地处理跳转 URL，不安全时使用默认值
 
 ## 环境变量
 

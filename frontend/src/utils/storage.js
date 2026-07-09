@@ -26,7 +26,8 @@ export function getStorage(key) {
 
 export function setStorage(key, value) {
   if (typeof value === 'object') {
-    localStorage.setItem(key, JSON.stringify(value))
+    const sanitized = sanitizeObject(value)
+    localStorage.setItem(key, JSON.stringify(sanitized))
   } else {
     localStorage.setItem(key, value)
   }
@@ -34,4 +35,18 @@ export function setStorage(key, value) {
 
 export function removeStorage(key) {
   localStorage.removeItem(key)
+}
+
+function sanitizeObject(obj) {
+  if (obj === null || typeof obj !== 'object') {
+    return obj
+  }
+  const sanitized = Array.isArray(obj) ? [] : {}
+  for (const [key, value] of Object.entries(obj)) {
+    if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+      continue
+    }
+    sanitized[key] = typeof value === 'object' ? sanitizeObject(value) : value
+  }
+  return sanitized
 }

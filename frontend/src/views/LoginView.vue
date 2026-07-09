@@ -25,6 +25,7 @@ import { ref, reactive } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/modules/user'
 import { login } from '@/api'
+import { sanitizeRedirect } from '@/utils/security'
 import BaseButton from '@/components/BaseButton.vue'
 
 const router = useRouter()
@@ -44,25 +45,28 @@ async function handleLogin() {
   loading.value = true
 
   try {
-    // Mock 登录：开发阶段无需后端，用户名 admin / 密码 123456
+    const isDevelopment = import.meta.env.MODE === 'development'
     const MOCK_USER = { username: 'admin', password: '123456' }
-    if (form.username === MOCK_USER.username && form.password === MOCK_USER.password) {
+
+    if (isDevelopment && form.username === MOCK_USER.username && form.password === MOCK_USER.password) {
       const mockToken = 'mock-token-' + Date.now()
       const mockUserInfo = { username: 'admin', permissions: ['dashboard', 'user', 'role'] }
       userStore.setTokenAction(mockToken)
       userStore.setUserInfo(mockUserInfo)
-      const redirect = route.query.redirect || '/'
-      router.push(redirect)
     } else {
-      // 尝试调用真实后端 API
       const res = await login(form)
       userStore.setTokenAction(res.token)
       userStore.setUserInfo(res.userInfo || {})
-      const redirect = route.query.redirect || '/'
-      router.push(redirect)
     }
+
+    const redirect = sanitizeRedirect(route.query.redirect)
+    router.push(redirect)
   } catch (error) {
-    errorMsg.value = error.message || '登录失败，请重试'
+    if (import.meta.env.MODE === 'development') {
+      errorMsg.value = error.message || '登录失败，请重试'
+    } else {
+      errorMsg.value = '登录失败，请检查用户名和密码'
+    }
   } finally {
     loading.value = false
   }
