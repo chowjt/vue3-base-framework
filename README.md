@@ -1,51 +1,49 @@
-# Vue3 前端基础框架 - 一键创建工具
+# Vue3 前端基础框架
 
-基于 Vue 3 + Vite + Pinia + Vue Router 的前端基础框架，通过一个 Windows 批处理脚本一键生成完整项目结构，特别针对中国大陆网络环境进行了优化。
+基于 Vue 3 + Vite + Pinia + Vue Router 的前端基础框架，提供标准的项目结构、规范化的代码组织和开箱即用的开发体验，特别针对中国大陆网络环境进行了优化。
 
 ## 技术栈
 
 | 技术 | 版本 | 用途 |
 |------|------|------|
-| Vue | 3.3.x | 前端框架（Composition API） |
-| Vite | 5.0.x | 构建工具 |
-| Pinia | 2.1.x | 状态管理 |
-| Vue Router | 4.2.x | 路由管理 |
-| Axios | 1.6.x | HTTP 请求 |
-| Sass | 1.69.x | CSS 预处理器 |
-| ESLint | 8.x | 代码检查 |
+| Vue | 3.5.x | 前端框架（Composition API） |
+| Vite | 8.1.x | 构建工具 |
+| Pinia | 2.3.x | 状态管理 |
+| Vue Router | 4.4.x | 路由管理 |
+| Axios | 1.7.x | HTTP 请求 |
+| Sass | 1.80.x | CSS 预处理器 |
+| ESLint | 9.x | 代码检查 |
 | Prettier | 3.x | 代码格式化 |
+
+## 环境要求
+
+- **Node.js** >= 18.0.0（Vite 8 推荐 Node 18+）
+- **npm** >= 9.0.0
+- **Windows** 操作系统
 
 ## 使用步骤
 
-### 环境要求
+### 第一步：进入项目目录
 
-- **Node.js** >= 16.0.0
-- **npm** >= 7.0.0
-- **Windows** 操作系统
-
-### 第一步：一键创建项目
-
-双击运行 `create-vue3-frontend.bat`，脚本将自动完成以下操作：
-
-1. 检测是否已存在 `frontend` 目录（如存在会提示是否覆盖）
-2. 创建完整的项目目录结构
-3. 生成所有配置文件和源代码文件
-4. 配置国内 npm 镜像源
-
-运行过程中会在 bat 文件同目录下生成 `create-vue3-frontend.log` 日志文件，记录每个步骤的执行情况。
+```powershell
+cd frontend
+```
 
 ### 第二步：安装依赖
 
-```bash
-cd frontend
+```powershell
 npm install
 ```
 
-> 已预配置 npmmirror.com 镜像源，国内环境无需额外设置即可快速安装。
+项目已预配置国内 npm 镜像源，国内环境无需额外设置即可快速安装。如遇依赖冲突，可使用：
+
+```powershell
+npm install --legacy-peer-deps
+```
 
 ### 第三步：启动开发服务器
 
-```bash
+```powershell
 npm run dev
 ```
 
@@ -60,18 +58,21 @@ npm run dev
 - `src/api/modules/` - 添加新 API 接口
 - `src/views/` - 添加新页面
 - `src/components/` - 添加新组件
+- `src/composables/` - 添加组合式函数
+- `src/directives/` - 添加自定义指令
+- `src/layouts/` - 添加布局组件
 
 ## 针对中国大陆网络环境的优化
 
 ### 1. npm 镜像源（.npmrc）
 
-项目自动生成 `.npmrc` 文件，将 npm registry 切换为国内镜像，避免因网络问题导致依赖安装失败：
+项目自动生成 `.npmrc` 文件，将 npm registry 切换为国内镜像：
 
 ```
 registry=https://registry.npmmirror.com
 ```
 
-同时配置了以下二进制包的国内镜像，解决原生模块下载超时问题：
+同时配置了常用二进制包的国内镜像，避免原生模块下载超时：
 
 | 配置项 | 说明 |
 |--------|------|
@@ -113,11 +114,10 @@ font-family: 'Helvetica Neue', Helvetica, 'PingFang SC',
 
 ## 项目结构
 
-脚本执行后生成的 `frontend` 目录结构如下：
-
 ```
 frontend/
 ├── public/                          # 静态资源（不经过构建）
+│   └── vite.svg                     # 网站图标
 ├── src/
 │   ├── api/                         # API 接口层
 │   │   ├── index.js                 # API 统一导出
@@ -153,11 +153,11 @@ frontend/
 │   └── main.js                      # 入口文件
 ├── .env                             # 通用环境变量
 ├── .env.development                 # 开发环境变量
-├── .env.production                       # 生产环境变量
-├── .eslintrc.cjs                    # ESLint 配置
+├── .env.production                  # 生产环境变量
 ├── .gitignore                       # Git 忽略规则
 ├── .npmrc                           # npm 镜像源配置
 ├── .prettierrc                      # Prettier 配置
+├── eslint.config.js                 # ESLint 配置（Flat Config）
 ├── index.html                       # HTML 入口
 ├── jsconfig.json                    # JS 路径别名配置
 ├── package.json                     # 项目依赖
@@ -201,6 +201,24 @@ frontend/
 
 在 `variables.scss` 中定义了项目级颜色和文本变量，通过 Vite 配置全局注入，组件中可直接使用 `$primary-color` 等变量而无需手动 import。
 
+### 自定义指令
+
+`v-permission` 指令用于按钮级权限控制，传入权限标识或数组，无权限时自动移除元素。
+
+```vue
+<button v-permission="'user:create'">新增用户</button>
+```
+
+## 登录功能
+
+项目包含完整的登录流程示例：
+
+- 默认已集成 Mock 登录，方便前端独立开发
+- **测试账号**：`admin`
+- **测试密码**：`123456`
+- 使用其他账号密码时会尝试调用真实后端 API `/api/auth/login`
+- 登录成功后 token 会持久化到 localStorage，并自动跳转原目标页或首页
+
 ## 环境变量
 
 | 文件 | 变量 | 说明 |
@@ -210,3 +228,11 @@ frontend/
 | `.env.production` | `VITE_API_BASE_URL` | 生产环境 API 地址 |
 
 自定义环境变量必须以 `VITE_` 前缀开头才能在代码中通过 `import.meta.env` 访问。
+
+## 开发规范
+
+- 使用 Vue 3 Composition API + `<script setup>` 语法
+- 组件名使用 PascalCase
+- 组合式函数使用 `useXxx` 命名
+- 状态模块使用 `useXxxStore` 命名
+- 路径别名统一使用 `@/xxx`

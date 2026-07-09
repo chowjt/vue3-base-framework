@@ -7,21 +7,22 @@
     "dev": "vite --port 3000 --open",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix",
+    "lint": "eslint . --fix",
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "vue": "^3.3.13",
-    "vue-router": "^4.2.5",
-    "pinia": "^2.1.7",
-    "axios": "^1.6.2"
+    "vue": "^3.5.13",
+    "vue-router": "^4.4.3",
+    "pinia": "^2.3.0",
+    "axios": "^1.7.9"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^4.5.2",
-    "vite": "^5.0.10",
-    "sass": "^1.69.5",
-    "eslint": "^8.56.0",
-    "eslint-plugin-vue": "^9.19.2",
-    "prettier": "^3.1.1"
+    "@vitejs/plugin-vue": "^6.0.7",
+    "vite": "^8.1.0",
+    "sass": "^1.80.0",
+    "eslint": "^9.15.0",
+    "eslint-plugin-vue": "^9.31.0",
+    "@eslint/js": "^9.15.0",
+    "prettier": "^3.4.2"
   }
 }
