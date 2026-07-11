@@ -1,5 +1,11 @@
 <template>
-  <button class="base-button" :class="[`base-button--${type}`, { 'base-button--disabled': disabled }]" :disabled="disabled" @click="handleClick">
+  <button
+    class="base-button"
+    :class="[`base-button--${type}`, { 'base-button--disabled': disabled }]"
+    :type="nativeType"
+    :disabled="disabled"
+    @click="handleClick"
+  >
     <slot />
   </button>
 </template>
@@ -10,6 +16,11 @@ defineProps({
     type: String,
     default: 'primary',
     validator: (value) => ['primary', 'success', 'warning', 'danger', 'info'].includes(value)
+  },
+  nativeType: {
+    type: String,
+    default: 'button',
+    validator: (value) => ['button', 'submit', 'reset'].includes(value)
   },
   disabled: {
     type: Boolean,
