@@ -522,7 +522,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { generateImage } from '@/utils/images'
 
@@ -770,14 +770,7 @@ onMounted(() => {
   startBannerAutoSlide()
   initScrollAnimation()
   startInfiniteScroll()
-  if (route.query.footer === '1') {
-    nextTick(() => {
-      const footerEl = document.getElementById('footer')
-      if (footerEl) {
-        footerEl.scrollIntoView({ behavior: 'auto' })
-      }
-    })
-  }
+  window.scrollTo(0, 0)
 })
 
 onUnmounted(() => {

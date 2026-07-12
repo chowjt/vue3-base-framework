@@ -8,14 +8,26 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('@/views/LoginView.vue'),
+    component: () => import('@/views/AuthView.vue'),
     meta: { title: '登录', guest: true }
   },
   {
     path: '/register',
     name: 'Register',
-    component: () => import('@/views/RegisterView.vue'),
+    component: () => import('@/views/AuthView.vue'),
     meta: { title: '注册', guest: true }
+  },
+  {
+    path: '/terms',
+    name: 'Terms',
+    component: () => import('@/views/TermsView.vue'),
+    meta: { title: '用户协议', guest: true }
+  },
+  {
+    path: '/privacy',
+    name: 'Privacy',
+    component: () => import('@/views/PrivacyView.vue'),
+    meta: { title: '隐私政策', guest: true }
   },
   {
     path: '/home',
